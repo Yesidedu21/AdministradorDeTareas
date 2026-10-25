@@ -1,141 +1,156 @@
-/* Estilo general de la tarjeta de tarea */
+
+/* ---------- Cuadrícula: se acomoda sola según el ancho ---------- */
+.task-board {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+/* ---------- Tarjeta ---------- */
 .task-card {
-    background: #ffffff;
-    border: 1px solid #e1e8ed;
-    border-radius: 10px;
-    padding: 16px;
-    margin-bottom: 15px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.04);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 18px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-sm);
     transition: transform 0.2s ease, box-shadow 0.2s ease;
-    max-width: 350px; /* Ideal para columnas de Kanban */
 }
 
 .task-card:hover {
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    box-shadow: var(--shadow-md);
 }
 
-/* Cabecera */
+/* Cabecera: título + prioridad */
 .card-header-info {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
     gap: 10px;
-    margin-bottom: 8px;
 }
 
 .task-title {
     font-size: 1rem;
     font-weight: 700;
-    color: #2c3e50;
-    margin: 0;
     line-height: 1.3;
-}
-
-/* Descripción */
-.task-description {
-    font-size: 0.88rem;
-    color: #596573;
-    margin-bottom: 12px;
-    line-height: 1.4;
     word-break: break-word;
 }
 
-/* Metadatos (Asignado y Fecha) */
+.task-description {
+    font-size: 0.9rem;
+    color: var(--muted);
+    line-height: 1.45;
+    word-break: break-word;
+}
+
+/* Asignado y fecha */
 .task-meta {
     display: flex;
     flex-direction: column;
     gap: 6px;
-    margin-bottom: 12px;
-    font-size: 0.82rem;
-    color: #7f8c8d;
-    background: #f8f9fa;
-    padding: 8px;
-    border-radius: 6px;
+    padding: 10px;
+    border-radius: 8px;
+    background: #f8f9fc;
+    font-size: 0.84rem;
+    color: var(--muted);
 }
 
 .meta-item {
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 8px;
 }
 
-/* Enlace adjunto */
-.task-link-container {
-    margin-bottom: 12px;
-}
-
+/* Enlace */
 .task-link {
     font-size: 0.85rem;
-    color: #3498db;
-    text-decoration: none;
     font-weight: 500;
+    color: var(--primary);
+    text-decoration: none;
 }
 
 .task-link:hover {
     text-decoration: underline;
 }
 
-/* Pie de tarjeta */
+
 .card-footer-info {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-top: 1px solid #edf2f7;
-    padding-top: 10px;
-    margin-top: 4px;
+    margin-top: auto;
+    padding-top: 12px;
+    border-top: 1px solid var(--border);
 }
 
-/* Insignias de Prioridad */
+/* ---------- Insignias de prioridad ---------- */
 .badge-priority {
+    padding: 3px 10px;
+    border-radius: 999px;
     font-size: 0.7rem;
     font-weight: 700;
-    padding: 3px 8px;
-    border-radius: 12px;
-    text-transform: uppercase;
     letter-spacing: 0.5px;
+    text-transform: uppercase;
     white-space: nowrap;
 }
 
 .badge-priority.high {
-    background-color: #fde8e8;
+    background: #fde8e8;
     color: #c53030;
 }
 
 .badge-priority.medium {
-    background-color: #fef3c7;
+    background: #fef3c7;
     color: #b45309;
 }
 
 .badge-priority.low {
-    background-color: #e6f4ea;
+    background: #e6f4ea;
     color: #137333;
 }
 
-/* Insignias de Estado */
+/* ---------- Insignias de estado (color según data-estado) ---------- */
 .badge-status {
+    padding: 3px 10px;
+    border-radius: 6px;
+    background: #e5e7eb;
+    color: #374151;
     font-size: 0.75rem;
     font-weight: 600;
-    padding: 2px 8px;
-    border-radius: 4px;
-    background-color: #e2e8f0;
-    color: #4a5568;
 }
 
-/* Botón de Eliminar */
+.badge-status[data-estado="EN PROCESO"] {
+    background: #dbeafe;
+    color: #1d4ed8;
+}
+
+.badge-status[data-estado="REVISIÓN"] {
+    background: #fef3c7;
+    color: #b45309;
+}
+
+.badge-status[data-estado="HECHO"] {
+    background: #dcfce7;
+    color: #166534;
+}
+
+/* ---------- Botón eliminar ---------- */
 .btn-action {
-    background: transparent;
+    padding: 5px 12px;
     border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    background: transparent;
     color: #64748b;
     font-size: 0.8rem;
-    padding: 4px 10px;
-    border-radius: 6px;
     cursor: pointer;
     transition: all 0.2s;
 }
 
 .btn-delete:hover {
-    background-color: #fee2e2;
+    background: #fee2e2;
     border-color: #f87171;
     color: #dc2626;
 }

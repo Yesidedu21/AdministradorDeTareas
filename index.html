@@ -6,91 +6,135 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../css/index.css">
     <link rel="stylesheet" href="../css/tarjeta.css">
-    <title>Tareas - Inicio</title>
+    <title>Planificador de Tareas</title>
 </head>
 
 <body>
-    <div class="container">
-        <main class="form-container">
-            <section class="card-form">
-                <h2>Crear Nueva Tarea</h2>
-                <p class="subtitle">Complete los campos para registrar una nueva actividad en el planificador.</p>
 
-                <form id="task-form" novalidate>
+    <!-- ===== NAVBAR ===== -->
+    <header class="navbar">
+        <div class="navbar__inner">
 
-                    <div class="form-group">
-                        <label for="task-name">Nombre de la Tarea <span class="required">*</span></label>
-                        <input type="text" id="task-name" name="taskName" required
-                            placeholder="Ej. Diseñar la interfaz de inicio">
-                    </div>
+            <a href="#" class="logo" aria-label="Inicio">
+                <span class="logo__placeholder">LOGO</span>
+            </a>
 
 
-                    <div class="form-group">
-                        <label for="task-desc">Descripción <span class="required">*</span></label>
-                        <textarea id="task-desc" name="taskDesc" rows="3" required
-                            placeholder="Detalles o pasos a seguir..."></textarea>
-                    </div>
+            <div class="navbar__center" role="search">
+                <input type="search" id="search-input" class="search-input" placeholder="Buscar tareas..."
+                    aria-label="Buscar tareas">
+                <button type="button" class="btn btn-primary" data-open-form>Crear Tarea</button>
+            </div>
 
 
-                    <div class="form-row">
-
-                        <div class="form-group">
-                            <label for="task-assigned">Asignado A <span class="required">*</span></label>
-                            <input type="text" id="task-assigned" name="taskAssigned" required
-                                placeholder="Nombre del responsable">
-                        </div>
-
-
-                        <div class="form-group">
-                            <label for="task-date">Fecha de Entrega <span class="required">*</span></label>
-                            <input type="date" id="task-date" name="taskDate" required>
-                        </div>
-                    </div>
+            <button type="button" class="avatar-btn" aria-label="Iniciar sesión" title="Iniciar sesión">
+                <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8"
+                    stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <circle cx="12" cy="8" r="4" />
+                    <path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8" />
+                </svg>
+            </button>
+        </div>
+    </header>
 
 
-                    <div class="form-row">
+    <main class="main">
+        <h1 class="page-title">Bandeja de entrada</h1>
 
-                        <div class="form-group">
-                            <label for="task-status">Estado <span class="required">*</span></label>
-                            <select id="task-status" name="taskStatus">
-                                <option value="">Seleccione Estado</option>
-                                <option value="POR HACER">Por hacer</option>
-                                <option value="EN PROCESO">En progreso</option>
-                                <option value="REVISIÓN">Revisión</option>
-                                <option value="HECHO">Hecho</option>
-                            </select>
-                        </div>
-
-
-                        <div class="form-group">
-                            <label for="task-priority">Prioridad</label>
-                            <select id="task-priority" name="taskPriority">
-                                <option value="low">Baja</option>
-                                <option value="medium" selected>Media</option>
-                                <option value="high">Alta</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="task-url">Archivo adjunto o Enlace</label>
-                        <input type="url" id="task-url" name="taskUrl" placeholder="Link / Enlace de referencia">
-                    </div>
-
-                    <div id="form-errors" class="form-errors" role="alert" hidden></div>
-
-                    <div class="form-actions">
-                        <button type="submit" class="btn btn-primary">Guardar Tarea</button>
-                    </div>
-                </form>
-            </section>
-
-
-        </main>
-        <section id="task-list" class="task-board">
-
+        <section id="empty-state" class="empty-state">
+            <svg viewBox="0 0 64 64" width="96" height="96" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M8 36l8-20h32l8 20" />
+                <path d="M8 36v12a4 4 0 004 4h40a4 4 0 004-4V36" />
+                <path d="M8 36h14a4 4 0 014 4 6 6 0 006 6 6 6 0 006-6 4 4 0 014-4h14" />
+            </svg>
+            <h2>Captura ahora, planifica después</h2>
+            <p>La bandeja de entrada es el lugar ideal para añadir tus tareas de forma rápida.</p>
+            <button type="button" class="btn btn-primary" data-open-form>+ Añadir tarea</button>
         </section>
-    </div>
+
+
+        <p id="no-results" class="no-results" hidden>No se encontraron tareas con ese criterio.</p>
+
+
+        <section id="task-list" class="task-board" aria-live="polite"></section>
+    </main>
+
+
+    <dialog id="task-dialog" class="modal" aria-labelledby="modal-title">
+        <div class="modal__content">
+
+            <div class="modal__header">
+                <div>
+                    <h2 id="modal-title">Crear Nueva Tarea</h2>
+                    <p class="subtitle">Complete los campos para registrar una nueva actividad.</p>
+                </div>
+                <button type="button" class="icon-btn" id="close-dialog" aria-label="Cerrar formulario">✕</button>
+            </div>
+
+            <form id="task-form" novalidate>
+
+                <div class="form-group">
+                    <label for="task-name">Nombre de la Tarea <span class="required">*</span></label>
+                    <input type="text" id="task-name" name="taskName" required
+                        placeholder="Ej. Diseñar la interfaz de inicio">
+                </div>
+
+                <div class="form-group">
+                    <label for="task-desc">Descripción <span class="required">*</span></label>
+                    <textarea id="task-desc" name="taskDesc" rows="3" required
+                        placeholder="Detalles o pasos a seguir..."></textarea>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="task-assigned">Asignado A <span class="required">*</span></label>
+                        <input type="text" id="task-assigned" name="taskAssigned" required
+                            placeholder="Nombre del responsable">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="task-date">Fecha de Entrega <span class="required">*</span></label>
+                        <input type="date" id="task-date" name="taskDate" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="task-status">Estado <span class="required">*</span></label>
+                        <select id="task-status" name="taskStatus">
+                            <option value="">Seleccione Estado</option>
+                            <option value="POR HACER">Por hacer</option>
+                            <option value="EN PROCESO">En proceso</option>
+                            <option value="REVISIÓN">Revisión</option>
+                            <option value="HECHO">Hecho</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="task-priority">Prioridad</label>
+                        <select id="task-priority" name="taskPriority">
+                            <option value="low">Baja</option>
+                            <option value="medium" selected>Media</option>
+                            <option value="high">Alta</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="task-url">Archivo adjunto o Enlace</label>
+                    <input type="url" id="task-url" name="taskUrl" placeholder="https://...">
+                </div>
+
+                <div id="form-errors" class="form-errors" role="alert" hidden></div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" id="cancel-task">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Guardar Tarea</button>
+                </div>
+            </form>
+        </div>
+    </dialog>
 
     <script type="module" src="../js/script.js"></script>
 </body>

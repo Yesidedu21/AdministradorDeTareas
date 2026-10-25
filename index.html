@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/css/index.css">
+    <link rel="stylesheet" href="../css/index.css">
     <title>Tareas - Inicio</title>
 </head>
 
@@ -15,31 +15,34 @@
             <h2>Crear Nueva Tarea</h2>
             <p class="subtitle">Complete los campos para registrar una nueva actividad en el planificador.</p>
 
-            <form id="form">
+            <form id="task-form" novalidate>
 
                 <div class="form-group">
-                    <label for="">Nombre de la Tarea <span class="required">*</span></label>
-                    <input type="text" id="" name="" required placeholder="Ej. Diseñar la interfaz de inicio">
+                    <label for="task-name">Nombre de la Tarea <span class="required">*</span></label>
+                    <input type="text" id="task-name" name="taskName" required
+                        placeholder="Ej. Diseñar la interfaz de inicio">
                 </div>
 
 
                 <div class="form-group">
-                    <label for="">Descripción</label>
-                    <textarea id="" name="" rows="3" placeholder="Detalles o pasos a seguir..."></textarea>
+                    <label for="task-desc">Descripción <span class="required">*</span></label>
+                    <textarea id="task-desc" name="taskDesc" rows="3" required
+                        placeholder="Detalles o pasos a seguir..."></textarea>
                 </div>
 
 
                 <div class="form-row">
 
                     <div class="form-group">
-                        <label for="">Asignado A <span class="required">*</span></label>
-                        <input type="text" id="" name="" required placeholder="Nombre del responsable">
+                        <label for="task-assigned">Asignado A <span class="required">*</span></label>
+                        <input type="text" id="task-assigned" name="taskAssigned" required
+                            placeholder="Nombre del responsable">
                     </div>
 
 
                     <div class="form-group">
-                        <label for="">Fecha de Entrega <span class="required">*</span></label>
-                        <input type="date" id="" name="" required>
+                        <label for="task-date">Fecha de Entrega <span class="required">*</span></label>
+                        <input type="date" id="task-date" name="taskDate" required>
                     </div>
                 </div>
 
@@ -47,18 +50,20 @@
                 <div class="form-row">
 
                     <div class="form-group">
-                        <label for="">Estado <span class="required">*</span></label>
-                        <select id="" name="">
-                            <option value="todo">Por hacer</option>
-                            <option value="in-progress">En progreso</option>
-                            <option value="done">Hecho</option>
+                        <label for="task-status">Estado <span class="required">*</span></label>
+                        <select id="task-status" name="taskStatus">
+                            <option value="">Seleccione Estado</option>
+                            <option value="POR HACER">Por hacer</option>
+                            <option value="EN PROCESO">En progreso</option>
+                            <option value="REVISIÓN">Revisión</option>
+                            <option value="HECHO">Hecho</option>
                         </select>
                     </div>
 
 
                     <div class="form-group">
-                        <label for="">Prioridad</label>
-                        <select id="" name="">
+                        <label for="task-priority">Prioridad</label>
+                        <select id="task-priority" name="taskPriority">
                             <option value="low">Baja</option>
                             <option value="medium" selected>Media</option>
                             <option value="high">Alta</option>
@@ -67,19 +72,21 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="task-link">Archivo adjunto o Enlace</label>
-                    <input type="url" id="task-url" name="taskUrl" required placeholder="Link / Enlace de referencia">
+                    <label for="task-url">Archivo adjunto o Enlace</label>
+                    <input type="url" id="task-url" name="taskUrl" placeholder="Link / Enlace de referencia">
                 </div>
 
+                <div id="form-errors" class="form-errors" role="alert" hidden></div>
 
                 <div class="form-actions">
                     <button type="submit" class="btn btn-primary">Guardar Tarea</button>
                 </div>
             </form>
         </section>
+        <section id="task-list" class="task-list"></section>
     </main>
 
-    <script src="/js/index.js"></script>
+    <script type="module" src="../js/script.js"></script>
 </body>
 
 </html>

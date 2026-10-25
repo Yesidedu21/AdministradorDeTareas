@@ -1,80 +1,32 @@
+// js/script.js
+// Conecta el formulario, el TaskManager y la pantalla.
 
 import { TaskManager } from "./taskManager.js";
 import { validateTaskForm, clearErrors } from "./validation.js";
+import { crearTarjetaHTML } from "./taskCard.js";
 
 const taskManager = new TaskManager();
 
 const form = document.getElementById("task-form");
 const taskList = document.getElementById("task-list");
 
+// Para probar desde la consola del navegador: taskManager.getAllTasks()
 window.taskManager = taskManager;
 
-function createInfoRow(label, value) {
-  const p = document.createElement("p");
-  p.className = "task-card__info";
-
-  const strong = document.createElement("strong");
-  strong.textContent = `${label}: `;
-
-  p.append(strong, value); 
-  return p;
+// Pinta una tarea en pantalla
+function renderTarea(tarea) {
+  taskList.insertAdjacentHTML("beforeend", crearTarjetaHTML(tarea));
 }
 
-function createTaskCard(task) {
-  const card = document.createElement("article");
-  card.className = "task-card";
-  card.dataset.id = task.id;
+// Elimina primero del array y luego de la pantalla
+function eliminarTarea(id) {
+  const eliminada = taskManager.deleteTask(id);
+  if (!eliminada) return; // si no existía en el array, no tocamos el DOM
 
-  const title = document.createElement("h3");
-  title.className = "task-card__title";
-  title.textContent = task.nombre;
-
-  const description = document.createElement("p");
-  description.className = "task-card__description";
-  description.textContent = task.descripcion;
-
-  card.append(
-    title,
-    description,
-    createInfoRow("Asignado a", task.asignadoA),
-    createInfoRow("Fecha de entrega", task.fechaDeEntrega),
-    createInfoRow("Estado", task.estado)
-  );
-
-
-  if (task.prioridad) {
-    card.append(createInfoRow("Prioridad", task.prioridad));
-  }
-  if (task.enlace) {
-    const link = document.createElement("a");
-    link.href = task.enlace;
-    link.target = "_blank";
-    link.rel = "noopener noreferrer";
-    link.textContent = task.enlace;
-
-    const p = document.createElement("p");
-    p.className = "task-card__info";
-    const strong = document.createElement("strong");
-    strong.textContent = "Enlace: ";
-    p.append(strong, link);
-    card.append(p);
-  }
-
-  
-  const deleteBtn = document.createElement("button");
-  deleteBtn.type = "button";
-  deleteBtn.className = "btn btn-danger";
-  deleteBtn.textContent = "Eliminar";
-
-  deleteBtn.addEventListener("click", () => {
-    taskManager.deleteTask(task.id); // 1) borra del array
-    card.remove(); // 2) borra del DOM
-  });
-
-  card.append(deleteBtn);
-  return card;
+  taskList.querySelector(`.task-card[data-id="${id}"]`)?.remove();
 }
 
+// Evento submit del formulario
 form.addEventListener("submit", (event) => {
   event.preventDefault();
 
@@ -90,9 +42,21 @@ form.addEventListener("submit", (event) => {
     enlace: document.getElementById("task-url").value.trim(),
   };
 
-  const newTask = taskManager.addTask(taskData);
-  taskList.append(createTaskCard(newTask));
+  const nuevaTarea = taskManager.addTask(taskData);
+  renderTarea(nuevaTarea);
 
   form.reset();
   clearErrors();
+});
+
+// Delegación de eventos: UN solo listener en el contenedor atiende los
+// botones "Eliminar" de todas las tarjetas, incluidas las que se creen después.
+taskList.addEventListener("click", (event) => {
+  const boton = event.target.closest(".btn-delete");
+  if (!boton) return; // el clic fue en otra parte
+
+  const tarjeta = boton.closest(".task-card");
+  const id = Number(tarjeta.dataset.id); // dataset siempre devuelve texto
+
+  eliminarTarea(id);
 });

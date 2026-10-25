@@ -17,12 +17,14 @@ body {
 .form-container {
     width: 100%;
     max-width: 500px;
+    padding-bottom: 25px;
 }
 
 .card-form {
     background: #ffffff;
     padding: 25px;
     border-radius: 6px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
 }
 
 .card-form h2 {
@@ -52,7 +54,7 @@ body {
 label {
     font-size: 15px;
     font-weight: 400;
-    color: #2c3e50;
+    color: #34495e;
     margin-bottom: 6px;
 }
 
@@ -61,6 +63,7 @@ label {
     justify-content: center;
     gap: 10px;
     margin-top: 20px;
+    border-top: 1px solid #ecf0f1;
     padding-top: 10px;
 }
 
@@ -71,12 +74,24 @@ label {
     font-size: 15px;
     font-weight: 600;
     cursor: pointer;
+    transition: background-color 0.2s;
 }
 
 .btn-primary {
-    background-color: #ecf0f1;
+    background-color: #3498db;
 }
 
 .btn-primary:hover {
     background-color: #d5dbdb;
+}
+
+@media (max-width: 576px) {
+    .form-row {
+        flex-direction: column;
+        gap: 0;
+    }
+    
+    .card-form {
+        padding: 20px;
+    }
 }

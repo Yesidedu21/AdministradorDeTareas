@@ -1,5 +1,5 @@
 /* Estilo general de la tarjeta de tarea */
-.task-list {
+.task-card {
     background: #ffffff;
     border: 1px solid #e1e8ed;
     border-radius: 10px;
@@ -10,7 +10,7 @@
     max-width: 350px; /* Ideal para columnas de Kanban */
 }
 
-.task-list:hover {
+.task-card:hover {
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }

@@ -17,18 +17,9 @@ export class TaskManager {
   }
 
 
-  addTask({
-    nombre,
-    descripcion,
-    asignadoA,
-    fechaDeEntrega,
-    estado,
-    prioridad = "",
-    enlace = "",
-  }) {
+  addTask({nombre, descripcion, asignadoA, fechaDeEntrega, estado, prioridad = "", enlace = "", }) {
     this.currentId++;
 
-    
     const task = {
       id: this.currentId,
       nombre,

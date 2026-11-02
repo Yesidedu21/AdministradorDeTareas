@@ -1,17 +1,11 @@
-// js/taskCard.js
-// Responsable de UNA sola cosa: convertir una tarea en el HTML de su tarjeta.
-// No toca el DOM ni el TaskManager.
 
-// Etiquetas legibles para la prioridad (el value del select es low/medium/high)
 const PRIORITY_LABELS = {
   low: "Baja",
   medium: "Media",
   high: "Alta",
 };
 
-// Convierte caracteres especiales en texto seguro.
-// Necesario porque ahora insertamos HTML como string: sin esto, si alguien
-// escribe <script> o <img onerror=...> en el nombre, se ejecutaría.
+
 function escapeHTML(text) {
   return String(text)
     .replaceAll("&", "&amp;")
@@ -21,8 +15,7 @@ function escapeHTML(text) {
     .replaceAll("'", "&#39;");
 }
 
-// Solo permite enlaces http/https (un input type="url" también acepta
-// cosas como "javascript:...", que no queremos en un href).
+
 function isSafeUrl(url) {
   try {
     const { protocol } = new URL(url);
@@ -32,7 +25,6 @@ function isSafeUrl(url) {
   }
 }
 
-// El enlace es opcional: si no hay (o no es seguro), no se dibuja nada
 function crearEnlaceHTML(enlace) {
   if (!enlace || !isSafeUrl(enlace)) return "";
 
@@ -61,7 +53,10 @@ export function crearTarjetaHTML(tarea) {
       ${crearEnlaceHTML(tarea.enlace)}
       <div class="card-footer-info">
         <span class="badge-status">${escapeHTML(tarea.estado)}</span>
-        <button type="button" class="btn-action btn-delete">Eliminar</button>
+        <div>
+          <button type="button" class="btn-action btn-update">Actualizar</button>
+          <button type="button" class="btn-action btn-delete">Eliminar</button>
+        </div>
       </div>
     </div>`;
 }

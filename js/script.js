@@ -1,5 +1,4 @@
-
-import { TaskManager } from "./taskManager.js";
+import { TaskManager, COMPLETED_STATUS } from "./taskManager.js";
 import { validateTaskForm, clearErrors } from "./validation.js";
 import { crearTarjetaHTML } from "./taskCard.js";
 
@@ -12,12 +11,10 @@ const searchInput = document.getElementById("search-input");
 const emptyState = document.getElementById("empty-state");
 const noResults = document.getElementById("no-results");
 
-
 window.taskManager = taskManager;
 
-
 function abrirFormulario() {
-  dialog.showModal(); 
+  dialog.showModal();
   document.getElementById("task-name").focus();
 }
 
@@ -36,8 +33,6 @@ dialog.addEventListener("close", () => {
   form.reset();
   clearErrors();
 });
-
-
 
 function filtrarTareas() {
   const texto = searchInput.value.trim().toLowerCase();
@@ -58,8 +53,6 @@ function filtrarTareas() {
   noResults.hidden = !(tareas.length > 0 && visibles === 0);
 }
 
-
-
 function actualizarVista() {
   emptyState.hidden = taskManager.getAllTasks().length > 0;
   filtrarTareas();
@@ -67,25 +60,29 @@ function actualizarVista() {
 
 searchInput.addEventListener("input", filtrarTareas);
 
+function renderTareas() {
+  taskManager.render(taskList, crearTarjetaHTML);
+  actualizarVista();
+}
 
+function completarTarea(id) {
+  const tarea = taskManager.getTaskById(id); 
+  if (!tarea || tarea.estado === COMPLETED_STATUS) return;
 
-function renderTarea(tarea) {
-  taskList.insertAdjacentHTML("beforeend", crearTarjetaHTML(tarea));
+  taskManager.updateTask(id, COMPLETED_STATUS); 
+  renderTareas(); 
 }
 
 function eliminarTarea(id) {
-  const eliminada = taskManager.deleteTask(id);
-  if (!eliminada) return;
-
-  taskList.querySelector(`.task-card[data-id="${id}"]`)?.remove();
-  actualizarVista();
+  if (!taskManager.deleteTask(id)) return;
+  renderTareas();
 }
 
 // ---------- Formulario ----------
 form.addEventListener("submit", (event) => {
   event.preventDefault();
 
-  if (!validateTaskForm()) return; // si hay errores, el modal sigue abierto
+  if (!validateTaskForm()) return;
 
   const taskData = {
     nombre: document.getElementById("task-name").value.trim(),
@@ -97,21 +94,26 @@ form.addEventListener("submit", (event) => {
     enlace: document.getElementById("task-url").value.trim(),
   };
 
-  const nuevaTarea = taskManager.addTask(taskData);
-  renderTarea(nuevaTarea);
-  actualizarVista();
+  taskManager.addTask(taskData);
+  renderTareas();
 
-  dialog.close(); // el evento "close" se encarga de limpiar el formulario
+  dialog.close();
 });
 
-// Delegación de eventos: un solo listener atiende todos los botones Eliminar
+// ---------- Un solo listener para todos los botones de las tarjetas ----------
 taskList.addEventListener("click", (event) => {
-  const boton = event.target.closest(".btn-delete");
-  if (!boton) return;
-
+  const boton = event.target; 
+  // Recorrido del DOM: sube desde el botón hasta la tarjeta que lo contiene
   const tarjeta = boton.closest(".task-card");
-  eliminarTarea(Number(tarjeta.dataset.id)); // dataset siempre devuelve texto
+  if (!tarjeta) return; 
+
+  const id = Number(tarjeta.dataset.id);
+
+  if (boton.classList.contains("btn-update")) {
+    completarTarea(id);
+  } else if (boton.classList.contains("btn-delete")) {
+    eliminarTarea(id);
+  }
 });
 
-// Estado inicial: sin tareas, se muestra la bandeja vacía
-actualizarVista();
+renderTareas();

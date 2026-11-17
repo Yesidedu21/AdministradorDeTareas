@@ -2,7 +2,7 @@
 /* ---------- Cuadrícula: se acomoda sola según el ancho ---------- */
 .task-board {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 20px;
 }
 
@@ -22,6 +22,16 @@
 .task-card:hover {
     transform: translateY(-2px);
     box-shadow: var(--shadow-md);
+}
+
+/* Tarea completada: título tachado y tarjeta un poco más tenue */
+.task-card--done .task-title {
+    text-decoration: line-through;
+    color: var(--muted);
+}
+
+.task-card--done .task-description {
+    opacity: 0.7;
 }
 
 /* Cabecera: título + prioridad */
@@ -76,14 +86,22 @@
     text-decoration: underline;
 }
 
-
+/* ---------- Pie: estado a la izquierda, acciones a la derecha ---------- */
 .card-footer-info {
     display: flex;
-    justify-content: space-around;
-    align-items: flex-end;
-    margin-top: auto;
+    flex-wrap: wrap; 
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    margin-top: auto; 
     padding-top: 12px;
     border-top: 1px solid var(--border);
+}
+
+.card-actions {
+    display: flex;
+    gap: 8px;
+    margin-left: auto; /* aunque baje de fila, se mantiene a la derecha */
 }
 
 /* ---------- Insignias de prioridad ---------- */
@@ -120,6 +138,7 @@
     color: #374151;
     font-size: 0.75rem;
     font-weight: 600;
+    white-space: nowrap;
 }
 
 .badge-status[data-estado="EN PROCESO"] {
@@ -137,20 +156,22 @@
     color: #166534;
 }
 
-/* ---------- Botón eliminar ---------- */
+/* ---------- Botones de acción ---------- */
 .btn-action {
-    padding: 5px 12px;
+    padding: 6px 12px;
     border: 1px solid #cbd5e1;
     border-radius: 6px;
     background: transparent;
     color: #64748b;
-    font-size: 0.8rem;
+    font-size: 0.78rem;
+    font-weight: 500;
     cursor: pointer;
+    white-space: nowrap;
     transition: all 0.2s;
 }
 
-.btn-update:hover {
-    background: #84dda6;
+.btn-update:hover:not(:disabled) {
+    background: #dcfce7;
     border-color: #166534;
     color: #166534;
 }
@@ -159,4 +180,14 @@
     background: #fee2e2;
     border-color: #f87171;
     color: #dc2626;
+}
+
+/* Botón Completar cuando la tarea ya está en HECHO */
+.btn-action:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+}
+
+.logo {
+
 }

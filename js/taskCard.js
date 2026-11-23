@@ -29,7 +29,8 @@ function crearEnlaceHTML(enlace) {
 
   return `
     <div class="task-link-container">
-      <a href="${escapeHTML(enlace)}" target="_blank" rel="noopener noreferrer" class="task-link">🔗 Ver enlace adjunto</a>
+      <a href="${escapeHTML(enlace)}" target="_blank" rel="noopener noreferrer" class="task-link">
+      <img src="../img/enlace.png" alt="LogoEnlace" class="logoEnlace"> Ver enlace adjunto</a>
     </div>`;
 }
 

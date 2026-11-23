@@ -1,8 +1,12 @@
+
 import { TaskManager, COMPLETED_STATUS } from "./taskManager.js";
 import { validateTaskForm, clearErrors } from "./validation.js";
 import { crearTarjetaHTML } from "./taskCard.js";
 
 const taskManager = new TaskManager();
+
+taskManager.load();
+
 
 const form = document.getElementById("task-form");
 const taskList = document.getElementById("task-list");
@@ -11,7 +15,9 @@ const searchInput = document.getElementById("search-input");
 const emptyState = document.getElementById("empty-state");
 const noResults = document.getElementById("no-results");
 
+
 window.taskManager = taskManager;
+
 
 function abrirFormulario() {
   dialog.showModal();
@@ -33,6 +39,7 @@ dialog.addEventListener("close", () => {
   form.reset();
   clearErrors();
 });
+
 
 function filtrarTareas() {
   const texto = searchInput.value.trim().toLowerCase();
@@ -65,17 +72,20 @@ function renderTareas() {
   actualizarVista();
 }
 
+
 function completarTarea(id) {
-  const tarea = taskManager.getTaskById(id); 
+  const tarea = taskManager.getTaskById(id);
   if (!tarea || tarea.estado === COMPLETED_STATUS) return;
 
-  taskManager.updateTask(id, COMPLETED_STATUS); 
-  renderTareas(); 
+  taskManager.updateTask(id, COMPLETED_STATUS);
+  renderTareas();
+  taskManager.save();
 }
 
 function eliminarTarea(id) {
   if (!taskManager.deleteTask(id)) return;
   renderTareas();
+  taskManager.save();
 }
 
 // ---------- Formulario ----------
@@ -96,16 +106,16 @@ form.addEventListener("submit", (event) => {
 
   taskManager.addTask(taskData);
   renderTareas();
+  taskManager.save();
 
   dialog.close();
 });
 
-// ---------- Un solo listener para todos los botones de las tarjetas ----------
 taskList.addEventListener("click", (event) => {
-  const boton = event.target; 
-  // Recorrido del DOM: sube desde el botón hasta la tarjeta que lo contiene
+  const boton = event.target;
+
   const tarjeta = boton.closest(".task-card");
-  if (!tarjeta) return; 
+  if (!tarjeta) return;
 
   const id = Number(tarjeta.dataset.id);
 
